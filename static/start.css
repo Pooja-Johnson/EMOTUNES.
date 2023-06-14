@@ -1,0 +1,11 @@
+ #root {
+     position: relative;
+     z-index: 0;
+ }
+
+ #image-overlay {
+     position: absolute;
+     top: 16.5%;
+     left: 65.3%;
+     z-index: 9999;
+ }

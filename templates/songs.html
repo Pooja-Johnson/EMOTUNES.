@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='songs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylenavbar.css') }}">
+    <title>Songs</title>
+</head>
+
+<body>
+
+    <body>
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/emotunes_logo2.png') }}" alt="Emotunes logo">
+                <ul>
+                    <li><a href="/chat">Continue chat!</a></li>
+                    <li><a href="/profile">Profile</a></li>
+
+                </ul>
+            </div>
+        </nav>
+        {% if playlist %}
+        <iframe class="play" style="border-radius:12px; box-shadow: 0 0 5px rgba(40, 100, 128, 0.1);"
+            src="https://open.spotify.com/embed/playlist/{{playlist[17:]}}" width="40%" height="700" frameBorder="0"
+            allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        {% endif %}
+        <br>
+        {% for track_id in track_ids %}
+        <iframe class="player" style="border-radius:12px" src="https://open.spotify.com/embed/track/{{track_id[14:]}}"
+            width="50%" height="352" frameBorder="0" allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        {% endfor %}
+
+        <br>
+        <div class="button1">
+            {% if page > 1 %}
+            <button class="button-8" type="button"
+                onclick="location.href='{{ url_for('display_tracks', page=page-1) }}'">Previous</button>
+            {% endif %}
+
+            {% for num in range(1, (total // tracks_per_page) + 1) %}
+            {% if num == page %}
+            <span class="button-8">{{ num }}</span>
+            {% else %}
+
+
+            <button class="button-8" type="button"
+                onclick="location.href='{{ url_for('display_tracks', page=num) }}'">{{
+                num }}</button>
+
+            {% endif %}
+            {% endfor %}
+
+            {% if page * tracks_per_page < total %} <button class="button-8" type="button"
+                onclick="location.href='{{ url_for('display_tracks', page=page+1) }}'">Next</button>
+                {% endif %}
+
+
+        </div>
+    </body>
+
+</html>

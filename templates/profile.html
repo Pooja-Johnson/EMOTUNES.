@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('../static/images/bg1.jpg');
+            margin: 0;
+            padding: 0;
+            background-attachment: fixed;
+            background-size: cover;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            opacity: 80%;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .profile h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .profile p {
+            font-size: 14px;
+            color: #477397d0;
+            margin: 0;
+        }
+
+        .info {
+            margin-bottom: 20px;
+        }
+
+        .info h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .info p {
+            font-size: 14px;
+            color: #221b1b;
+            margin: 0;
+        }
+
+        .music {
+            margin-bottom: 20px;
+        }
+
+        .music h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .music ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .music li {
+            margin-bottom: 10px;
+        }
+
+        .music li span {
+            color: #888888;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .form-container label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-container input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .plot {
+            background-color: transparent;
+            width: 50%;
+
+        }
+    </style>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylenavbar.css') }}">
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/emotunes_logo2.png') }}" alt="Emotunes logo">
+            <ul>
+                <li><a href="/chat">Continue chat!</a></li>
+                <li><a href="/">Home</a></li>
+
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="profile">
+            <img src="static/images/profilepic.png" alt="Profile Pic">
+            <h1 id="username">{{username}}</h1>
+            <p id="interests">Interests</p>
+        </div>
+        <div class="music">
+            <h2>Favorite Artists</h2>
+            <ul>
+                {% for artist in artists %}
+                <li><span>{{loop.index}}</span> {{artist}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="chart-container" class="plot">
+            <script>
+                var chartData = {{ chart_data| safe }};
+
+                // Extract the labels and values from the chart data
+                var labels = chartData.labels;
+                var values = chartData.values;
+
+                // Create a pie chart using Plotly.js
+                var data = [{
+                    values: values,
+                    labels: labels,
+                    type: 'pie'
+                }];
+
+                var layout = {
+                    title: 'Mood Distribution',
+                    plot_bgcolor: "rgba(0,0,0,0)",
+                    paper_bgcolor: "rgba(0,0,0,0)"
+
+                };
+
+                Plotly.newPlot('chart-container', data, layout);</script>
+        </div>
+        <!-- <div class="form-container" id="formContainer">
+      <form id="profileForm">
+        <label for="usernameInput">Username:</label>
+        <input type="text" id="usernameInput" placeholder="Enter your username">
+        <label for="interestsInput">Interests:</label>
+        <input type="text" id="interestsInput" placeholder="Enter your interests">
+        <button type="submit">Save</button>
+      </form>
+    </div>
+    <div class="button-container">
+      <button onclick="showForm()">Update Profile</button>
+    </div>
+  </div> -->
+        <script>
+            function showForm() {
+                document.getElementById("formContainer").style.display = "block";
+            }
+
+            document.getElementById("profileForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+                const username = document.getElementById("usernameInput").value;
+                const interests = document.getElementById("interestsInput").value;
+
+                document.getElementById("username").textContent = username;
+                document.getElementById("interests").textContent = interests;
+
+                document.getElementById("formContainer").style.display = "none";
+            });
+        </script>
+</body>
+
+</html>
