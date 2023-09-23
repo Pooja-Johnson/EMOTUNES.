@@ -5,7 +5,7 @@ import json
 import spotipy.util as util
 import random
 from moodtape_functions import authenticate_spotify, aggregate_top_artists, aggregate_top_tracks, select_tracks, create_playlist
-from supabase import create_client, Client
+#from supabase import create_client, Client
 
 
 supabase_url = "https://adhqbycntsyljqyknkzk.supabase.co"
@@ -14,8 +14,8 @@ client_id = 'fe950c4faf544e42af36cfa40473ccd3'
 client_secret = 'c37d08196f3644a081b8dd97854e2be7'
 redirect_uri = 'http://localhost:8000/callback'
 scope = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-supabase: Client = create_client(supabase_url, supabase_key)
-openai.api_key = ""
+#supabase: Client = create_client(supabase_url, supabase_key)
+openai.api_key = "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"
 global chat
 chat = ''
 global selected_tracks
@@ -80,9 +80,9 @@ def moodtape():
     print('mood', mood[0])
     print('user', username)
 
-    data = supabase.table("emo_table").insert(
-        {"Username": username, "mood": mood[0]}).execute()
-    assert len(data.data) > 0
+    #data = supabase.table("emo_table").insert(
+        #{"Username": username, "mood": mood[0]}).execute()
+    #assert len(data.data) > 0
 
     token = util.prompt_for_user_token(username,
                                        scope=scope,
@@ -128,20 +128,20 @@ def profile():
     global username
     print('topa:', top_artists_names)
     print('user', username)
-    data = supabase.table('emo_table').select('mood').eq(
-        'Username', username).execute()
-    print('resp:', data.data)
-    if data:
-        moods = [record['mood'] for record in data.data]
-        mood_counts = {}
-        for mood in moods:
-            mood_counts[mood] = mood_counts.get(mood, 0) + 1
-        labels = list(mood_counts.keys())
-        values = list(mood_counts.values())
-        chart_data = json.dumps({'labels': labels, 'values': values})
-    else:
-        print("No data found")
-    return render_template("profile.html", chart_data=chart_data, artists=top_artists_names[:5], username=username)
+   # data = supabase.table('emo_table').select('mood').eq(
+        #'Username', username).execute()
+    #print('resp:', data.data)
+    # if data:
+    #     moods = [record['mood'] for record in data.data]
+    #     mood_counts = {}
+    #     for mood in moods:
+    #         mood_counts[mood] = mood_counts.get(mood, 0) + 1
+    #     labels = list(mood_counts.keys())
+    #     values = list(mood_counts.values())
+    #     chart_data = json.dumps({'labels': labels, 'values': values})
+    # else:
+    #     print("No data found")
+    #return render_template("profile.html", chart_data=chart_data, artists=top_artists_names[:5], username=username)
 
 
 if __name__ == '__main__':
